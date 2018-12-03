@@ -6,6 +6,7 @@
         <hr>
         <br>
         <br>
+        <alert :message="message" v-if="showMessage"></alert>
         <button type="button" class="btn btn-success btn-sm" v-b-modal.book-modal>Add Book</button>
         <br>
         <br>
@@ -70,12 +71,19 @@
 </template>
 <script>
 import axios from "axios";
+import Alert from "./Alert";
+
 export default {
   data() {
     return {
       books: [],
-      addBookForm: { title: "", author: "", read: [] }
+      addBookForm: { title: "", author: "", read: [] },
+      message: "",
+      showMessage: false
     };
+  },
+  components: {
+    alert: Alert
   },
   methods: {
     getBooks() {
@@ -93,6 +101,8 @@ export default {
         .post(path, payload)
         .then(() => {
           this.getBooks();
+          this.message = "Book added!";
+          this.showMessage = true;
         })
         .catch(error => {
           console.error(error);

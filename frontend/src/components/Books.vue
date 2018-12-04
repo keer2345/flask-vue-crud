@@ -192,12 +192,15 @@ export default {
       };
       this.updateBook(payload, this.editForm.id);
     },
-    updateBook(paylaod, bookID) {
+    updateBook(payload, bookID) {
       const path = `http://localhost:5000/books/${bookID}`;
       axios
         .put(path, payload)
         .then(() => {
           this.getBooks();
+          console.log('update success...')
+          this.message = "Book updated!";
+          this.showMessage = true;
         })
         .catch(error => {
           console.error(error);

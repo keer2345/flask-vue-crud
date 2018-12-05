@@ -34,7 +34,11 @@
                   v-b-modal.book-update-modal
                   @click="editBook(book)"
                 >Update</button>
-                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  @click="onDeleteBook(book)"
+                >Delete</button>
               </td>
             </tr>
           </tbody>
@@ -198,7 +202,7 @@ export default {
         .put(path, payload)
         .then(() => {
           this.getBooks();
-          console.log('update success...')
+          console.log("update success...");
           this.message = "Book updated!";
           this.showMessage = true;
         })
@@ -212,6 +216,23 @@ export default {
       this.$refs.editBookModal.hide();
       this.initForm();
       this.getBooks(); // why?
+    },
+    onDeleteBook(book) {
+      this.deleteBook(book.id);
+    },
+    deleteBook(bookID) {
+      const path = `http://localhost:5000/books/${bookID}`;
+      axios
+        .delete(path)
+        .then(response => {
+          this.getBooks();
+          this.message = response.data.message;
+          this.showMessage = true;
+        })
+        .catch(error => {
+          console.error(error);
+          this.getBooks();
+        });
     }
   },
   beforeMount() {
